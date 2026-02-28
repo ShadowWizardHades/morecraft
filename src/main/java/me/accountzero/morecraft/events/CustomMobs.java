@@ -67,6 +67,10 @@ public class CustomMobs implements Listener {
             phantom.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40);
             phantom.setHealth(40.0);
         }
+        if (event.getEntityType() == EntityType.CHICKEN) {
+            Chicken chicken = (Chicken) event.getEntity();
+            chicken.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(1);
+        }
 //        if (event.getEntity() instanceof LivingEntity) {
 //            updateHealthBar((LivingEntity) event.getEntity());
 //        }
