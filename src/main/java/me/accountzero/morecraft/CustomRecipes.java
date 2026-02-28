@@ -18,24 +18,6 @@ public class CustomRecipes {
         FurnaceRecipe zombieFleshToLeather = new FurnaceRecipe(new NamespacedKey(Morecraft.getInstance(), "zombie_flesh_to_leather"), ItemStack.of(Material.LEATHER), new RecipeChoice.ExactChoice(new ItemStack(Material.ROTTEN_FLESH)), 10, 20);
         Bukkit.addRecipe(zombieFleshToLeather);
 
-        // Stomp Boots
-        ItemStack stompBoots = new ItemStack(Material.LEATHER_BOOTS);
-        ItemMeta stompBootsMeta = stompBoots.getItemMeta();
-        stompBootsMeta.setLore(Arrays.asList(
-                "§7Pozwalają na super wysoki skok!",
-                "§7Kliknij SHIFT w powietrzu dla Slam Attack!",
-                "§8§oMagiczne buty skoczka..."
-        ));
-        stompBootsMeta.setDisplayName("§6§lStomp Boots");
-        stompBootsMeta.addAttributeModifier(Attribute.GENERIC_JUMP_STRENGTH, new AttributeModifier(new NamespacedKey(Morecraft.getInstance(), "stomp_boots_jump_boost"), 1.5, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlotGroup.FEET));
-        stompBoots.setItemMeta(stompBootsMeta);
-
-        ShapedRecipe stompBootsRecipe = new ShapedRecipe(new NamespacedKey(Morecraft.getInstance(), "stomp_boots"), stompBoots);
-        stompBootsRecipe.shape("FFF", "FLF", "FFF");
-        stompBootsRecipe.setIngredient('F', Material.FEATHER);
-        stompBootsRecipe.setIngredient('L', Material.LEATHER_BOOTS);
-        Bukkit.addRecipe(stompBootsRecipe);
-
         // Blood Medalion
         ItemStack bloodMedalion = new ItemStack(Material.REDSTONE);
         ItemMeta bloodMedalionMeta = bloodMedalion.getItemMeta();
