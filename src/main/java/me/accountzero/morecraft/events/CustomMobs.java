@@ -94,6 +94,28 @@ public class CustomMobs implements Listener {
         }
     }
 
+    @EventHandler
+    public void onWitchThrowPotion(ProjectileLaunchEvent event) {
+        if (event.getEntity().getShooter() instanceof Witch && event.getEntity() instanceof ThrownPotion potion) {
+
+            ItemStack customPotion = createRandomLevelFivePotion();
+            potion.setItem(customPotion);
+        }
+    }
+
+    private ItemStack createRandomLevelFivePotion() {
+        ItemStack potion = new ItemStack(Material.SPLASH_POTION);
+        PotionMeta meta = (PotionMeta) potion.getItemMeta();
+        List<PotionEffectType> ALLOWED_POTION_TYPES = List.of(PotionEffectType.POISON, PotionEffectType.SLOWNESS, PotionEffectType.INSTANT_DAMAGE, PotionEffectType.MINING_FATIGUE, PotionEffectType.REGENERATION, PotionEffectType.SPEED, PotionEffectType.INSTANT_HEALTH, PotionEffectType.HASTE);
+
+        PotionEffectType randomEffect = (PotionEffectType) ALLOWED_POTION_TYPES.get(random.nextInt(ALLOWED_POTION_TYPES.size()));
+
+        meta.addCustomEffect(new PotionEffect(randomEffect, 240, 4), true);
+
+        potion.setItemMeta(meta);
+        return potion;
+    }
+
     private void updateHealthBar(LivingEntity entity) {
         // Get current and max health
         double currentHealth = Math.max(entity.getHealth(), 0); // Prevent negatives
