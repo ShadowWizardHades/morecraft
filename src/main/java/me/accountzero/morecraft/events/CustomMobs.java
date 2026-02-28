@@ -67,9 +67,9 @@ public class CustomMobs implements Listener {
             phantom.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40);
             phantom.setHealth(40.0);
         }
-        if (event.getEntity() instanceof LivingEntity) {
-            updateHealthBar((LivingEntity) event.getEntity());
-        }
+//        if (event.getEntity() instanceof LivingEntity) {
+//            updateHealthBar((LivingEntity) event.getEntity());
+//        }
     }
 
     @EventHandler
@@ -82,17 +82,17 @@ public class CustomMobs implements Listener {
         }
     }
 
-    @EventHandler
-    public void onEntityDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof LivingEntity) {
-            LivingEntity entity = (LivingEntity) event.getEntity();
-
-            double newHealth = entity.getHealth() - event.getFinalDamage();
-            entity.setHealth(Math.max(newHealth, 0)); // Prevent negative health
-
-            updateHealthBar(entity);
-        }
-    }
+//    @EventHandler
+//    public void onEntityDamage(EntityDamageEvent event) {
+//        if (event.getEntity() instanceof LivingEntity) {
+//            LivingEntity entity = (LivingEntity) event.getEntity();
+//
+//            double newHealth = entity.getHealth() - event.getFinalDamage();
+//            entity.setHealth(Math.max(newHealth, 0)); // Prevent negative health
+//
+//            updateHealthBar(entity);
+//        }
+//    }
 
     @EventHandler
     public void onWitchThrowPotion(ProjectileLaunchEvent event) {
@@ -116,16 +116,16 @@ public class CustomMobs implements Listener {
         return potion;
     }
 
-    private void updateHealthBar(LivingEntity entity) {
-        // Get current and max health
-        double currentHealth = Math.max(entity.getHealth(), 0); // Prevent negatives
-        double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-
-        // Format health bar as "currentHealth / maxHealth"
-        String healthBar = String.format("§c%.0f §f/ §a%.0f", currentHealth, maxHealth);
-
-        // Set the custom name to the health bar and make it visible
-        entity.setCustomName(healthBar);
-        entity.setCustomNameVisible(true);
-    }
+//    private void updateHealthBar(LivingEntity entity) {
+//        // Get current and max health
+//        double currentHealth = Math.max(entity.getHealth(), 0); // Prevent negatives
+//        double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+//
+//        // Format health bar as "currentHealth / maxHealth"
+//        String healthBar = String.format("§c%.0f §f/ §a%.0f", currentHealth, maxHealth);
+//
+//        // Set the custom name to the health bar and make it visible
+//        entity.setCustomName(healthBar);
+//        entity.setCustomNameVisible(true);
+//    }
 }
