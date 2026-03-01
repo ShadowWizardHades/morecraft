@@ -23,10 +23,35 @@ public class CustomMobs implements Listener {
     public void onEntitySpawn(EntitySpawnEvent event) {
         if (event.getEntityType() == EntityType.ZOMBIE) {
             Zombie zombie = (Zombie) event.getEntity();
-            zombie.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET));
-            zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.3);
-            zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(30);
-            zombie.setHealth(30.0);
+            int zombieRand = random.nextInt(200);
+            if(zombieRand < 110){
+                zombie.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET));
+                zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.3);
+                zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(30);
+                zombie.setHealth(30.0);
+            } else if(zombieRand > 110 && zombieRand < 180){
+                zombie.getEquipment().setHelmet(new ItemStack(Material.GOLDEN_HELMET));
+                zombie.getEquipment().setItemInMainHand(new ItemStack(Material.GOLDEN_SWORD));
+                zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.33);
+                zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(36);
+                zombie.setHealth(36.0);
+            } else if(zombieRand > 180 && zombieRand < 199){
+                zombie.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
+                zombie.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
+                zombie.getEquipment().setItemInMainHand(new ItemStack(Material.IRON_SWORD));
+                zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.36);
+                zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(42);
+                zombie.setHealth(42.0);
+            } else {
+                zombie.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
+                zombie.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
+                zombie.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
+                zombie.getEquipment().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
+                zombie.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
+                zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.42);
+                zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60);
+                zombie.setHealth(60.0);
+            }
         }
         if (event.getEntityType() == EntityType.SKELETON) {
             Skeleton skeleton = (Skeleton) event.getEntity();
