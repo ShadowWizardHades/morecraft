@@ -7,10 +7,15 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Arrays;
 
 public class CustomRecipes {
+
+    // Tags the Blood Medallion so CustomMobs can recognize it in onBloodMedalionDamage
+    // and double incoming damage to match the doubled outgoing damage.
+    public static final String BLOOD_MEDALION_TAG = "blood_medalion_item";
 
     public static void register() {
         // Furnace Recipes
@@ -26,6 +31,7 @@ public class CustomRecipes {
         ));
         bloodMedalionMeta.setDisplayName("§6§lBlood Medalion");
         bloodMedalionMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(new NamespacedKey(Morecraft.getInstance(), "blood_medalion_attack_boost"), 1, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlotGroup.ANY));
+        bloodMedalionMeta.getPersistentDataContainer().set(new NamespacedKey(Morecraft.getInstance(), BLOOD_MEDALION_TAG), PersistentDataType.BYTE, (byte) 1);
         bloodMedalion.setItemMeta(bloodMedalionMeta);
 
         ShapedRecipe bloodMedalionRecipe = new ShapedRecipe(new NamespacedKey(Morecraft.getInstance(), "blood_medalion"), bloodMedalion);

@@ -1,5 +1,6 @@
 package me.accountzero.morecraft.events;
 
+import me.accountzero.morecraft.CustomRecipes;
 import me.accountzero.morecraft.Morecraft;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -26,6 +27,7 @@ import java.util.Random;
 public class CustomMobs implements Listener {
     Random random = new Random();
     private final NamespacedKey zombieTierKey = new NamespacedKey(Morecraft.getInstance(), "zombie_tier");
+    private final NamespacedKey bloodMedalionKey = new NamespacedKey(Morecraft.getInstance(), CustomRecipes.BLOOD_MEDALION_TAG);
 
     private static final int TIER_LEATHER = 0;
     private static final int TIER_GOLD = 1;
@@ -150,6 +152,24 @@ public class CustomMobs implements Listener {
             default -> 0;
         };
         event.setDroppedExp(event.getDroppedExp() + bonusXp);
+    }
+
+    @EventHandler
+    public void onBloodMedalionDamage(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (isHoldingBloodMedalion(player)) {
+            event.setDamage(event.getDamage() * 2);
+        }
+    }
+
+    private boolean isHoldingBloodMedalion(Player player) {
+        return hasBloodMedalionTag(player.getInventory().getItemInMainHand())
+                || hasBloodMedalionTag(player.getInventory().getItemInOffHand());
+    }
+
+    private boolean hasBloodMedalionTag(ItemStack item) {
+        if (item.getItemMeta() == null) return false;
+        return item.getItemMeta().getPersistentDataContainer().has(bloodMedalionKey, PersistentDataType.BYTE);
     }
 
     @EventHandler
