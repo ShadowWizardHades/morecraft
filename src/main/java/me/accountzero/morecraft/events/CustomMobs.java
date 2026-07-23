@@ -1,17 +1,22 @@
 package me.accountzero.morecraft.events;
 
+import me.accountzero.morecraft.Morecraft;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -20,10 +25,26 @@ import java.util.Random;
 
 public class CustomMobs implements Listener {
     Random random = new Random();
+    private final NamespacedKey zombieTierKey = new NamespacedKey(Morecraft.getInstance(), "zombie_tier");
+
+    private static final int TIER_LEATHER = 0;
+    private static final int TIER_GOLD = 1;
+    private static final int TIER_IRON = 2;
+    private static final int TIER_DIAMOND = 3;
 
     private void setAttr(LivingEntity entity, Attribute attribute, double value) {
         AttributeInstance instance = entity.getAttribute(attribute);
         if (instance != null) instance.setBaseValue(value);
+    }
+
+    // Zeroes drop chance on the gear we equipped so it isn't a free armor/weapon farm, while natural loot (rotten flesh, carrots, potatoes, etc.) is untouched.
+    private void zeroGearDropChances(Zombie zombie) {
+        EntityEquipment equipment = zombie.getEquipment();
+        equipment.setHelmetDropChance(0f);
+        equipment.setChestplateDropChance(0f);
+        equipment.setLeggingsDropChance(0f);
+        equipment.setBootsDropChance(0f);
+        equipment.setItemInMainHandDropChance(0f);
     }
 
     @EventHandler
@@ -31,18 +52,22 @@ public class CustomMobs implements Listener {
         if (event.getEntityType() == EntityType.ZOMBIE) {
             Zombie zombie = (Zombie) event.getEntity();
             int zombieRand = random.nextInt(200);
+            int zombieTier;
             if(zombieRand <= 110){
+                zombieTier = TIER_LEATHER;
                 zombie.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET));
                 setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.3);
                 setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 30);
                 zombie.setHealth(30.0);
             } else if(zombieRand <= 180){
+                zombieTier = TIER_GOLD;
                 zombie.getEquipment().setHelmet(new ItemStack(Material.GOLDEN_HELMET));
                 zombie.getEquipment().setItemInMainHand(new ItemStack(Material.GOLDEN_SWORD));
                 setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.33);
                 setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 36);
                 zombie.setHealth(36.0);
             } else if(zombieRand < 199){
+                zombieTier = TIER_IRON;
                 zombie.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
                 zombie.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
                 zombie.getEquipment().setItemInMainHand(new ItemStack(Material.IRON_SWORD));
@@ -50,6 +75,7 @@ public class CustomMobs implements Listener {
                 setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 42);
                 zombie.setHealth(42.0);
             } else {
+                zombieTier = TIER_DIAMOND;
                 zombie.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
                 zombie.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
                 zombie.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
@@ -59,6 +85,8 @@ public class CustomMobs implements Listener {
                 setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 60);
                 zombie.setHealth(60.0);
             }
+            zeroGearDropChances(zombie);
+            zombie.getPersistentDataContainer().set(zombieTierKey, PersistentDataType.INTEGER, zombieTier);
         }
         if (event.getEntityType() == EntityType.SKELETON) {
             Skeleton skeleton = (Skeleton) event.getEntity();
@@ -106,6 +134,22 @@ public class CustomMobs implements Listener {
 //        if (event.getEntity() instanceof LivingEntity) {
 //            updateHealthBar((LivingEntity) event.getEntity());
 //        }
+    }
+
+    @EventHandler
+    public void onZombieDeath(EntityDeathEvent event) {
+        if (!(event.getEntity() instanceof Zombie zombie)) return;
+
+        Integer tier = zombie.getPersistentDataContainer().get(zombieTierKey, PersistentDataType.INTEGER);
+        if (tier == null) return;
+
+        int bonusXp = switch (tier) {
+            case TIER_GOLD -> 10;
+            case TIER_IRON -> 25;
+            case TIER_DIAMOND -> 50;
+            default -> 0;
+        };
+        event.setDroppedExp(event.getDroppedExp() + bonusXp);
     }
 
     @EventHandler
