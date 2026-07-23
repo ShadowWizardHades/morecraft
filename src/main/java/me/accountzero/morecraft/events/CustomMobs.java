@@ -2,6 +2,7 @@ package me.accountzero.morecraft.events;
 
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,6 +20,12 @@ import java.util.Random;
 
 public class CustomMobs implements Listener {
     Random random = new Random();
+
+    private void setAttr(LivingEntity entity, Attribute attribute, double value) {
+        AttributeInstance instance = entity.getAttribute(attribute);
+        if (instance != null) instance.setBaseValue(value);
+    }
+
     @EventHandler
     public void onEntitySpawn(EntitySpawnEvent event) {
         if (event.getEntityType() == EntityType.ZOMBIE) {
@@ -26,21 +33,21 @@ public class CustomMobs implements Listener {
             int zombieRand = random.nextInt(200);
             if(zombieRand <= 110){
                 zombie.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET));
-                zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.3);
-                zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(30);
+                setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.3);
+                setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 30);
                 zombie.setHealth(30.0);
             } else if(zombieRand <= 180){
                 zombie.getEquipment().setHelmet(new ItemStack(Material.GOLDEN_HELMET));
                 zombie.getEquipment().setItemInMainHand(new ItemStack(Material.GOLDEN_SWORD));
-                zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.33);
-                zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(36);
+                setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.33);
+                setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 36);
                 zombie.setHealth(36.0);
             } else if(zombieRand < 199){
                 zombie.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
                 zombie.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
                 zombie.getEquipment().setItemInMainHand(new ItemStack(Material.IRON_SWORD));
-                zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.36);
-                zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(42);
+                setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.36);
+                setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 42);
                 zombie.setHealth(42.0);
             } else {
                 zombie.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
@@ -48,53 +55,53 @@ public class CustomMobs implements Listener {
                 zombie.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
                 zombie.getEquipment().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
                 zombie.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
-                zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.42);
-                zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60);
+                setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.42);
+                setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 60);
                 zombie.setHealth(60.0);
             }
         }
         if (event.getEntityType() == EntityType.SKELETON) {
             Skeleton skeleton = (Skeleton) event.getEntity();
             skeleton.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET));
-            skeleton.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.35);
-            skeleton.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(30);
+            setAttr(skeleton, Attribute.GENERIC_MOVEMENT_SPEED, 0.35);
+            setAttr(skeleton, Attribute.GENERIC_MAX_HEALTH, 30);
             skeleton.setHealth(30.0);
         }
         if (event.getEntityType() == EntityType.SPIDER) {
             Spider spider = (Spider) event.getEntity();
-            spider.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.69);
-            spider.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).setBaseValue(0.8);
-            spider.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(0.5);
-            spider.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(24);
+            setAttr(spider, Attribute.GENERIC_MOVEMENT_SPEED, 0.69);
+            setAttr(spider, Attribute.GENERIC_JUMP_STRENGTH, 0.8);
+            setAttr(spider, Attribute.GENERIC_ATTACK_DAMAGE, 0.5);
+            setAttr(spider, Attribute.GENERIC_MAX_HEALTH, 24);
             spider.setHealth(24.0);
         }
         if (event.getEntityType() == EntityType.RABBIT) {
             Rabbit rabbit = (Rabbit) event.getEntity();
-            rabbit.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).setBaseValue(1.2);
-            rabbit.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).setBaseValue(8);
-            rabbit.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(6);
+            setAttr(rabbit, Attribute.GENERIC_JUMP_STRENGTH, 1.2);
+            setAttr(rabbit, Attribute.GENERIC_SAFE_FALL_DISTANCE, 8);
+            setAttr(rabbit, Attribute.GENERIC_MAX_HEALTH, 6);
             rabbit.setHealth(6.0);
         }
         if (event.getEntityType() == EntityType.IRON_GOLEM) {
             IronGolem ironGolem = (IronGolem) event.getEntity();
-            ironGolem.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.50);
-            ironGolem.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(150);
+            setAttr(ironGolem, Attribute.GENERIC_MOVEMENT_SPEED, 0.50);
+            setAttr(ironGolem, Attribute.GENERIC_MAX_HEALTH, 150);
             ironGolem.setHealth(150.0);
         }
         if (event.getEntityType() == EntityType.SNOW_GOLEM) {
             // They will not die when exposed to sun + maybe repurpose as sentry gun ?
             Snowman snowGolem = (Snowman) event.getEntity();
-            snowGolem.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40);
+            setAttr(snowGolem, Attribute.GENERIC_MAX_HEALTH, 40);
             snowGolem.setHealth(40.0);
         }
         if (event.getEntityType() == EntityType.PHANTOM) {
             Phantom phantom = (Phantom) event.getEntity();
-            phantom.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40);
+            setAttr(phantom, Attribute.GENERIC_MAX_HEALTH, 40);
             phantom.setHealth(40.0);
         }
         if (event.getEntityType() == EntityType.CHICKEN) {
             Chicken chicken = (Chicken) event.getEntity();
-            chicken.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(1);
+            setAttr(chicken, Attribute.GENERIC_MOVEMENT_SPEED, 1);
         }
 //        if (event.getEntity() instanceof LivingEntity) {
 //            updateHealthBar((LivingEntity) event.getEntity());
