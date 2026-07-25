@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,6 +40,10 @@ public class CustomMobs implements Listener {
         if (instance != null) instance.setBaseValue(value);
     }
 
+    private FileConfiguration config() {
+        return Morecraft.getInstance().getConfig();
+    }
+
     // Zeroes drop chance on the gear we equipped so it isn't a free armor/weapon farm, while natural loot (rotten flesh, carrots, potatoes, etc.) is untouched.
     private void zeroGearDropChances(Zombie zombie) {
         EntityEquipment equipment = zombie.getEquipment();
@@ -65,29 +70,29 @@ public class CustomMobs implements Listener {
     }
 
     private void buffZombie(Zombie zombie) {
-        int zombieRand = random.nextInt(200);
+        FileConfiguration config = config();
+        int leatherWeight = config.getInt("mobs.zombie.tiers.leather.weight", 111);
+        int goldWeight = config.getInt("mobs.zombie.tiers.gold.weight", 70);
+        int ironWeight = config.getInt("mobs.zombie.tiers.iron.weight", 18);
+        int diamondWeight = config.getInt("mobs.zombie.tiers.diamond.weight", 1);
+
+        int roll = random.nextInt(leatherWeight + goldWeight + ironWeight + diamondWeight);
         int zombieTier;
-        if (zombieRand <= 110) {
+        if (roll < leatherWeight) {
             zombieTier = TIER_LEATHER;
             zombie.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET));
-            setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.3);
-            setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 30);
-            zombie.setHealth(30.0);
-        } else if (zombieRand <= 180) {
+            applyZombieTierStats(zombie, config, "leather", 0.3, 30.0);
+        } else if (roll < leatherWeight + goldWeight) {
             zombieTier = TIER_GOLD;
             zombie.getEquipment().setHelmet(new ItemStack(Material.GOLDEN_HELMET));
             zombie.getEquipment().setItemInMainHand(new ItemStack(Material.GOLDEN_SWORD));
-            setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.33);
-            setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 36);
-            zombie.setHealth(36.0);
-        } else if (zombieRand < 199) {
+            applyZombieTierStats(zombie, config, "gold", 0.33, 36.0);
+        } else if (roll < leatherWeight + goldWeight + ironWeight) {
             zombieTier = TIER_IRON;
             zombie.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
             zombie.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
             zombie.getEquipment().setItemInMainHand(new ItemStack(Material.IRON_SWORD));
-            setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.36);
-            setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 42);
-            zombie.setHealth(42.0);
+            applyZombieTierStats(zombie, config, "iron", 0.36, 42.0);
         } else {
             zombieTier = TIER_DIAMOND;
             zombie.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
@@ -95,55 +100,71 @@ public class CustomMobs implements Listener {
             zombie.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
             zombie.getEquipment().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
             zombie.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
-            setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.42);
-            setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 60);
-            zombie.setHealth(60.0);
+            applyZombieTierStats(zombie, config, "diamond", 0.42, 60.0);
         }
         zeroGearDropChances(zombie);
         zombie.getPersistentDataContainer().set(zombieTierKey, PersistentDataType.INTEGER, zombieTier);
     }
 
+    private void applyZombieTierStats(Zombie zombie, FileConfiguration config, String tier, double defaultSpeed, double defaultHealth) {
+        double speed = config.getDouble("mobs.zombie.tiers." + tier + ".speed", defaultSpeed);
+        double health = config.getDouble("mobs.zombie.tiers." + tier + ".health", defaultHealth);
+        setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, speed);
+        setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, health);
+        zombie.setHealth(health);
+    }
+
     private void buffSkeleton(Skeleton skeleton) {
+        FileConfiguration config = config();
         skeleton.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET));
-        setAttr(skeleton, Attribute.GENERIC_MOVEMENT_SPEED, 0.35);
-        setAttr(skeleton, Attribute.GENERIC_MAX_HEALTH, 30);
-        skeleton.setHealth(30.0);
+        setAttr(skeleton, Attribute.GENERIC_MOVEMENT_SPEED, config.getDouble("mobs.skeleton.speed", 0.35));
+        double health = config.getDouble("mobs.skeleton.health", 30.0);
+        setAttr(skeleton, Attribute.GENERIC_MAX_HEALTH, health);
+        skeleton.setHealth(health);
     }
 
     private void buffSpider(Spider spider) {
-        setAttr(spider, Attribute.GENERIC_MOVEMENT_SPEED, 0.69);
-        setAttr(spider, Attribute.GENERIC_JUMP_STRENGTH, 0.8);
-        setAttr(spider, Attribute.GENERIC_ATTACK_DAMAGE, 0.5);
-        setAttr(spider, Attribute.GENERIC_MAX_HEALTH, 24);
-        spider.setHealth(24.0);
+        FileConfiguration config = config();
+        setAttr(spider, Attribute.GENERIC_MOVEMENT_SPEED, config.getDouble("mobs.spider.speed", 0.69));
+        setAttr(spider, Attribute.GENERIC_JUMP_STRENGTH, config.getDouble("mobs.spider.jump-strength", 0.8));
+        setAttr(spider, Attribute.GENERIC_ATTACK_DAMAGE, config.getDouble("mobs.spider.attack-damage", 0.5));
+        double health = config.getDouble("mobs.spider.health", 24.0);
+        setAttr(spider, Attribute.GENERIC_MAX_HEALTH, health);
+        spider.setHealth(health);
     }
 
     private void buffRabbit(Rabbit rabbit) {
-        setAttr(rabbit, Attribute.GENERIC_JUMP_STRENGTH, 1.2);
-        setAttr(rabbit, Attribute.GENERIC_SAFE_FALL_DISTANCE, 8);
-        setAttr(rabbit, Attribute.GENERIC_MAX_HEALTH, 6);
-        rabbit.setHealth(6.0);
+        FileConfiguration config = config();
+        setAttr(rabbit, Attribute.GENERIC_JUMP_STRENGTH, config.getDouble("mobs.rabbit.jump-strength", 1.2));
+        setAttr(rabbit, Attribute.GENERIC_SAFE_FALL_DISTANCE, config.getDouble("mobs.rabbit.safe-fall-distance", 8.0));
+        double health = config.getDouble("mobs.rabbit.health", 6.0);
+        setAttr(rabbit, Attribute.GENERIC_MAX_HEALTH, health);
+        rabbit.setHealth(health);
     }
 
     private void buffIronGolem(IronGolem ironGolem) {
-        setAttr(ironGolem, Attribute.GENERIC_MOVEMENT_SPEED, 0.50);
-        setAttr(ironGolem, Attribute.GENERIC_MAX_HEALTH, 150);
-        ironGolem.setHealth(150.0);
+        FileConfiguration config = config();
+        setAttr(ironGolem, Attribute.GENERIC_MOVEMENT_SPEED, config.getDouble("mobs.iron-golem.speed", 0.50));
+        double health = config.getDouble("mobs.iron-golem.health", 150.0);
+        setAttr(ironGolem, Attribute.GENERIC_MAX_HEALTH, health);
+        ironGolem.setHealth(health);
     }
 
     private void buffSnowGolem(Snowman snowGolem) {
         // They will not die when exposed to sun + maybe repurpose as sentry gun ?
-        setAttr(snowGolem, Attribute.GENERIC_MAX_HEALTH, 40);
-        snowGolem.setHealth(40.0);
+        double health = config().getDouble("mobs.snow-golem.health", 40.0);
+        setAttr(snowGolem, Attribute.GENERIC_MAX_HEALTH, health);
+        snowGolem.setHealth(health);
     }
 
     private void buffPhantom(Phantom phantom) {
-        setAttr(phantom, Attribute.GENERIC_MAX_HEALTH, 40);
-        phantom.setHealth(40.0);
+        double health = config().getDouble("mobs.phantom.health", 40.0);
+        setAttr(phantom, Attribute.GENERIC_MAX_HEALTH, health);
+        phantom.setHealth(health);
     }
 
     private void buffChicken(Chicken chicken) {
-        setAttr(chicken, Attribute.GENERIC_MOVEMENT_SPEED, 1);
+        setAttr(chicken, Attribute.GENERIC_MOVEMENT_SPEED, config().getDouble("mobs.chicken.speed", 1.0));
     }
 
     @EventHandler
@@ -184,9 +205,8 @@ public class CustomMobs implements Listener {
     public void onEntityShoot(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Skeleton) {
             Arrow arrow = (Arrow) event.getProjectile();
-
-            // Increase speed (multiply vector)
-            arrow.setVelocity(arrow.getVelocity().multiply(3)); // shoots faster/further
+            double multiplier = config().getDouble("mobs.skeleton.arrow-velocity-multiplier", 3.0);
+            arrow.setVelocity(arrow.getVelocity().multiply(multiplier));
         }
     }
 
@@ -218,7 +238,10 @@ public class CustomMobs implements Listener {
 
         PotionEffectType randomEffect = (PotionEffectType) ALLOWED_POTION_TYPES.get(random.nextInt(ALLOWED_POTION_TYPES.size()));
 
-        meta.addCustomEffect(new PotionEffect(randomEffect, 240, 4), true);
+        FileConfiguration config = config();
+        int durationTicks = config.getInt("witch.potion-duration-ticks", 240);
+        int amplifier = config.getInt("witch.potion-amplifier", 4);
+        meta.addCustomEffect(new PotionEffect(randomEffect, durationTicks, amplifier), true);
 
         potion.setItemMeta(meta);
         return potion;
