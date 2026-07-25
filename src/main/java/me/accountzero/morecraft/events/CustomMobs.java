@@ -51,91 +51,99 @@ public class CustomMobs implements Listener {
 
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event) {
-        if (event.getEntityType() == EntityType.ZOMBIE) {
-            Zombie zombie = (Zombie) event.getEntity();
-            int zombieRand = random.nextInt(200);
-            int zombieTier;
-            if(zombieRand <= 110){
-                zombieTier = TIER_LEATHER;
-                zombie.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET));
-                setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.3);
-                setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 30);
-                zombie.setHealth(30.0);
-            } else if(zombieRand <= 180){
-                zombieTier = TIER_GOLD;
-                zombie.getEquipment().setHelmet(new ItemStack(Material.GOLDEN_HELMET));
-                zombie.getEquipment().setItemInMainHand(new ItemStack(Material.GOLDEN_SWORD));
-                setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.33);
-                setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 36);
-                zombie.setHealth(36.0);
-            } else if(zombieRand < 199){
-                zombieTier = TIER_IRON;
-                zombie.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
-                zombie.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
-                zombie.getEquipment().setItemInMainHand(new ItemStack(Material.IRON_SWORD));
-                setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.36);
-                setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 42);
-                zombie.setHealth(42.0);
-            } else {
-                zombieTier = TIER_DIAMOND;
-                zombie.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
-                zombie.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
-                zombie.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
-                zombie.getEquipment().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
-                zombie.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
-                setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.42);
-                setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 60);
-                zombie.setHealth(60.0);
-            }
-            zeroGearDropChances(zombie);
-            zombie.getPersistentDataContainer().set(zombieTierKey, PersistentDataType.INTEGER, zombieTier);
+        switch (event.getEntityType()) {
+            case ZOMBIE -> buffZombie((Zombie) event.getEntity());
+            case SKELETON -> buffSkeleton((Skeleton) event.getEntity());
+            case SPIDER -> buffSpider((Spider) event.getEntity());
+            case RABBIT -> buffRabbit((Rabbit) event.getEntity());
+            case IRON_GOLEM -> buffIronGolem((IronGolem) event.getEntity());
+            case SNOW_GOLEM -> buffSnowGolem((Snowman) event.getEntity());
+            case PHANTOM -> buffPhantom((Phantom) event.getEntity());
+            case CHICKEN -> buffChicken((Chicken) event.getEntity());
+            default -> {}
         }
-        if (event.getEntityType() == EntityType.SKELETON) {
-            Skeleton skeleton = (Skeleton) event.getEntity();
-            skeleton.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET));
-            setAttr(skeleton, Attribute.GENERIC_MOVEMENT_SPEED, 0.35);
-            setAttr(skeleton, Attribute.GENERIC_MAX_HEALTH, 30);
-            skeleton.setHealth(30.0);
+    }
+
+    private void buffZombie(Zombie zombie) {
+        int zombieRand = random.nextInt(200);
+        int zombieTier;
+        if (zombieRand <= 110) {
+            zombieTier = TIER_LEATHER;
+            zombie.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET));
+            setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.3);
+            setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 30);
+            zombie.setHealth(30.0);
+        } else if (zombieRand <= 180) {
+            zombieTier = TIER_GOLD;
+            zombie.getEquipment().setHelmet(new ItemStack(Material.GOLDEN_HELMET));
+            zombie.getEquipment().setItemInMainHand(new ItemStack(Material.GOLDEN_SWORD));
+            setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.33);
+            setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 36);
+            zombie.setHealth(36.0);
+        } else if (zombieRand < 199) {
+            zombieTier = TIER_IRON;
+            zombie.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
+            zombie.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
+            zombie.getEquipment().setItemInMainHand(new ItemStack(Material.IRON_SWORD));
+            setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.36);
+            setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 42);
+            zombie.setHealth(42.0);
+        } else {
+            zombieTier = TIER_DIAMOND;
+            zombie.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
+            zombie.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
+            zombie.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
+            zombie.getEquipment().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
+            zombie.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
+            setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, 0.42);
+            setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, 60);
+            zombie.setHealth(60.0);
         }
-        if (event.getEntityType() == EntityType.SPIDER) {
-            Spider spider = (Spider) event.getEntity();
-            setAttr(spider, Attribute.GENERIC_MOVEMENT_SPEED, 0.69);
-            setAttr(spider, Attribute.GENERIC_JUMP_STRENGTH, 0.8);
-            setAttr(spider, Attribute.GENERIC_ATTACK_DAMAGE, 0.5);
-            setAttr(spider, Attribute.GENERIC_MAX_HEALTH, 24);
-            spider.setHealth(24.0);
-        }
-        if (event.getEntityType() == EntityType.RABBIT) {
-            Rabbit rabbit = (Rabbit) event.getEntity();
-            setAttr(rabbit, Attribute.GENERIC_JUMP_STRENGTH, 1.2);
-            setAttr(rabbit, Attribute.GENERIC_SAFE_FALL_DISTANCE, 8);
-            setAttr(rabbit, Attribute.GENERIC_MAX_HEALTH, 6);
-            rabbit.setHealth(6.0);
-        }
-        if (event.getEntityType() == EntityType.IRON_GOLEM) {
-            IronGolem ironGolem = (IronGolem) event.getEntity();
-            setAttr(ironGolem, Attribute.GENERIC_MOVEMENT_SPEED, 0.50);
-            setAttr(ironGolem, Attribute.GENERIC_MAX_HEALTH, 150);
-            ironGolem.setHealth(150.0);
-        }
-        if (event.getEntityType() == EntityType.SNOW_GOLEM) {
-            // They will not die when exposed to sun + maybe repurpose as sentry gun ?
-            Snowman snowGolem = (Snowman) event.getEntity();
-            setAttr(snowGolem, Attribute.GENERIC_MAX_HEALTH, 40);
-            snowGolem.setHealth(40.0);
-        }
-        if (event.getEntityType() == EntityType.PHANTOM) {
-            Phantom phantom = (Phantom) event.getEntity();
-            setAttr(phantom, Attribute.GENERIC_MAX_HEALTH, 40);
-            phantom.setHealth(40.0);
-        }
-        if (event.getEntityType() == EntityType.CHICKEN) {
-            Chicken chicken = (Chicken) event.getEntity();
-            setAttr(chicken, Attribute.GENERIC_MOVEMENT_SPEED, 1);
-        }
-//        if (event.getEntity() instanceof LivingEntity) {
-//            updateHealthBar((LivingEntity) event.getEntity());
-//        }
+        zeroGearDropChances(zombie);
+        zombie.getPersistentDataContainer().set(zombieTierKey, PersistentDataType.INTEGER, zombieTier);
+    }
+
+    private void buffSkeleton(Skeleton skeleton) {
+        skeleton.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET));
+        setAttr(skeleton, Attribute.GENERIC_MOVEMENT_SPEED, 0.35);
+        setAttr(skeleton, Attribute.GENERIC_MAX_HEALTH, 30);
+        skeleton.setHealth(30.0);
+    }
+
+    private void buffSpider(Spider spider) {
+        setAttr(spider, Attribute.GENERIC_MOVEMENT_SPEED, 0.69);
+        setAttr(spider, Attribute.GENERIC_JUMP_STRENGTH, 0.8);
+        setAttr(spider, Attribute.GENERIC_ATTACK_DAMAGE, 0.5);
+        setAttr(spider, Attribute.GENERIC_MAX_HEALTH, 24);
+        spider.setHealth(24.0);
+    }
+
+    private void buffRabbit(Rabbit rabbit) {
+        setAttr(rabbit, Attribute.GENERIC_JUMP_STRENGTH, 1.2);
+        setAttr(rabbit, Attribute.GENERIC_SAFE_FALL_DISTANCE, 8);
+        setAttr(rabbit, Attribute.GENERIC_MAX_HEALTH, 6);
+        rabbit.setHealth(6.0);
+    }
+
+    private void buffIronGolem(IronGolem ironGolem) {
+        setAttr(ironGolem, Attribute.GENERIC_MOVEMENT_SPEED, 0.50);
+        setAttr(ironGolem, Attribute.GENERIC_MAX_HEALTH, 150);
+        ironGolem.setHealth(150.0);
+    }
+
+    private void buffSnowGolem(Snowman snowGolem) {
+        // They will not die when exposed to sun + maybe repurpose as sentry gun ?
+        setAttr(snowGolem, Attribute.GENERIC_MAX_HEALTH, 40);
+        snowGolem.setHealth(40.0);
+    }
+
+    private void buffPhantom(Phantom phantom) {
+        setAttr(phantom, Attribute.GENERIC_MAX_HEALTH, 40);
+        phantom.setHealth(40.0);
+    }
+
+    private void buffChicken(Chicken chicken) {
+        setAttr(chicken, Attribute.GENERIC_MOVEMENT_SPEED, 1);
     }
 
     @EventHandler
