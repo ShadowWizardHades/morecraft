@@ -1,0 +1,58 @@
+# Morecraft tuning values.
+# Edit these and run /reload (or restart the server) to rebalance without recompiling the plugin.
+
+mobs:
+  zombie:
+    # Relative weights used to pick a gear tier on spawn (weight / sum-of-weights = chance).
+    tiers:
+      leather:
+        weight: 111
+        health: 30.0
+        speed: 0.3
+      gold:
+        weight: 70
+        health: 36.0
+        speed: 0.33
+      iron:
+        weight: 18
+        health: 42.0
+        speed: 0.36
+      diamond:
+        weight: 1
+        health: 60.0
+        speed: 0.42
+
+  skeleton:
+    health: 30.0
+    speed: 0.35
+    arrow-velocity-multiplier: 3.0
+
+  spider:
+    health: 24.0
+    speed: 0.69
+    jump-strength: 0.8
+    attack-damage: 0.5
+
+  rabbit:
+    health: 6.0
+    jump-strength: 1.2
+    safe-fall-distance: 8.0
+
+  iron-golem:
+    health: 150.0
+    speed: 0.50
+
+  snow-golem:
+    health: 40.0
+
+  phantom:
+    health: 40.0
+
+  chicken:
+    speed: 1.0
+
+witch:
+  # Duration in ticks (20 ticks = 1 second) and amplifier (0-based, so 4 = level 5) of the
+  # potion effect witches throw.
+  potion-duration-ticks: 240
+  potion-amplifier: 4
