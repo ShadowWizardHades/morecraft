@@ -9,8 +9,11 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 
-import java.util.Arrays;
+import java.util.List;
 
 public class CustomRecipes {
 
@@ -27,10 +30,12 @@ public class CustomRecipes {
         // Blood Medalion
         ItemStack bloodMedalion = new ItemStack(Material.REDSTONE);
         ItemMeta bloodMedalionMeta = bloodMedalion.getItemMeta();
-        bloodMedalionMeta.setLore(Arrays.asList(
-                "Double the fun but double the pain"
+        bloodMedalionMeta.lore(List.of(
+                Component.text("Double the fun but double the pain")
         ));
-        bloodMedalionMeta.setDisplayName("§6§lBlood Medalion");
+        bloodMedalionMeta.displayName(Component.text("Blood Medalion")
+                .color(NamedTextColor.GOLD)
+                .decorate(TextDecoration.BOLD));
         bloodMedalionMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(new NamespacedKey(plugin, "blood_medalion_attack_boost"), 1, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlotGroup.ANY));
         bloodMedalionMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, BLOOD_MEDALION_TAG), PersistentDataType.BYTE, (byte) 1);
         bloodMedalion.setItemMeta(bloodMedalionMeta);
