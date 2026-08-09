@@ -210,18 +210,6 @@ public class CustomMobs implements Listener {
         }
     }
 
-//    @EventHandler
-//    public void onEntityDamage(EntityDamageEvent event) {
-//        if (event.getEntity() instanceof LivingEntity) {
-//            LivingEntity entity = (LivingEntity) event.getEntity();
-//
-//            double newHealth = entity.getHealth() - event.getFinalDamage();
-//            entity.setHealth(Math.max(newHealth, 0)); // Prevent negative health
-//
-//            updateHealthBar(entity);
-//        }
-//    }
-
     @EventHandler
     public void onWitchThrowPotion(ProjectileLaunchEvent event) {
         if (event.getEntity().getShooter() instanceof Witch && event.getEntity() instanceof ThrownPotion potion) {
@@ -246,17 +234,4 @@ public class CustomMobs implements Listener {
         potion.setItemMeta(meta);
         return potion;
     }
-
-//    private void updateHealthBar(LivingEntity entity) {
-//        // Get current and max health
-//        double currentHealth = Math.max(entity.getHealth(), 0); // Prevent negatives
-//        double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-//
-//        // Format health bar as "currentHealth / maxHealth"
-//        String healthBar = String.format("§c%.0f §f/ §a%.0f", currentHealth, maxHealth);
-//
-//        // Set the custom name to the health bar and make it visible
-//        entity.setCustomName(healthBar);
-//        entity.setCustomNameVisible(true);
-//    }
 }
