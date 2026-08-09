@@ -8,6 +8,7 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
 
@@ -17,10 +18,10 @@ public class CustomRecipes {
     // and double incoming damage to match the doubled outgoing damage.
     public static final String BLOOD_MEDALION_TAG = "blood_medalion_item";
 
-    public static void register() {
+    public static void register(Plugin plugin) {
         // Furnace Recipes
         // ZombieFlesh to Leather
-        FurnaceRecipe zombieFleshToLeather = new FurnaceRecipe(new NamespacedKey(Morecraft.getInstance(), "zombie_flesh_to_leather"), ItemStack.of(Material.LEATHER), new RecipeChoice.ExactChoice(new ItemStack(Material.ROTTEN_FLESH)), 10, 20);
+        FurnaceRecipe zombieFleshToLeather = new FurnaceRecipe(new NamespacedKey(plugin, "zombie_flesh_to_leather"), ItemStack.of(Material.LEATHER), new RecipeChoice.ExactChoice(new ItemStack(Material.ROTTEN_FLESH)), 10, 20);
         Bukkit.addRecipe(zombieFleshToLeather);
 
         // Blood Medalion
@@ -30,11 +31,11 @@ public class CustomRecipes {
                 "Double the fun but double the pain"
         ));
         bloodMedalionMeta.setDisplayName("§6§lBlood Medalion");
-        bloodMedalionMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(new NamespacedKey(Morecraft.getInstance(), "blood_medalion_attack_boost"), 1, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlotGroup.ANY));
-        bloodMedalionMeta.getPersistentDataContainer().set(new NamespacedKey(Morecraft.getInstance(), BLOOD_MEDALION_TAG), PersistentDataType.BYTE, (byte) 1);
+        bloodMedalionMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(new NamespacedKey(plugin, "blood_medalion_attack_boost"), 1, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlotGroup.ANY));
+        bloodMedalionMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, BLOOD_MEDALION_TAG), PersistentDataType.BYTE, (byte) 1);
         bloodMedalion.setItemMeta(bloodMedalionMeta);
 
-        ShapedRecipe bloodMedalionRecipe = new ShapedRecipe(new NamespacedKey(Morecraft.getInstance(), "blood_medalion"), bloodMedalion);
+        ShapedRecipe bloodMedalionRecipe = new ShapedRecipe(new NamespacedKey(plugin, "blood_medalion"), bloodMedalion);
         bloodMedalionRecipe.shape("RRR", "RDR", "RRR");
         bloodMedalionRecipe.setIngredient('R', Material.REDSTONE_BLOCK);
         bloodMedalionRecipe.setIngredient('D', Material.DIAMOND_BLOCK);

@@ -9,7 +9,7 @@ public final class Morecraft extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(new CustomMobs(), this);
-        CustomRecipes.register();
+        CustomRecipes.register(this);
     }
 
     @Override
