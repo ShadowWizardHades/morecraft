@@ -24,7 +24,9 @@ public class CustomRecipes {
     public static void register(Plugin plugin) {
         // Furnace Recipes
         // ZombieFlesh to Leather
-        FurnaceRecipe zombieFleshToLeather = new FurnaceRecipe(new NamespacedKey(plugin, "zombie_flesh_to_leather"), ItemStack.of(Material.LEATHER), new RecipeChoice.ExactChoice(new ItemStack(Material.ROTTEN_FLESH)), 10, 20);
+        NamespacedKey zombieFleshToLeatherKey = new NamespacedKey(plugin, "zombie_flesh_to_leather");
+        Bukkit.removeRecipe(zombieFleshToLeatherKey); // guards against a duplicate-key crash on /reload
+        FurnaceRecipe zombieFleshToLeather = new FurnaceRecipe(zombieFleshToLeatherKey, ItemStack.of(Material.LEATHER), new RecipeChoice.ExactChoice(new ItemStack(Material.ROTTEN_FLESH)), 10, 20);
         Bukkit.addRecipe(zombieFleshToLeather);
 
         // Blood Medalion
@@ -40,7 +42,9 @@ public class CustomRecipes {
         bloodMedalionMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, BLOOD_MEDALION_TAG), PersistentDataType.BYTE, (byte) 1);
         bloodMedalion.setItemMeta(bloodMedalionMeta);
 
-        ShapedRecipe bloodMedalionRecipe = new ShapedRecipe(new NamespacedKey(plugin, "blood_medalion"), bloodMedalion);
+        NamespacedKey bloodMedalionRecipeKey = new NamespacedKey(plugin, "blood_medalion");
+        Bukkit.removeRecipe(bloodMedalionRecipeKey); // guards against a duplicate-key crash on /reload
+        ShapedRecipe bloodMedalionRecipe = new ShapedRecipe(bloodMedalionRecipeKey, bloodMedalion);
         bloodMedalionRecipe.shape("RRR", "RDR", "RRR");
         bloodMedalionRecipe.setIngredient('R', Material.REDSTONE_BLOCK);
         bloodMedalionRecipe.setIngredient('D', Material.DIAMOND_BLOCK);

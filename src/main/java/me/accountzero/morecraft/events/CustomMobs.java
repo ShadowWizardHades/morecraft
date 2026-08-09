@@ -54,7 +54,7 @@ public class CustomMobs implements Listener {
         equipment.setItemInMainHandDropChance(0f);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         switch (event.getEntityType()) {
             case ZOMBIE -> buffZombie((Zombie) event.getEntity());
