@@ -2,6 +2,20 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Karpathy-rules
+
+1. Think Before Coding
+   Don't assume. Don't hide confusion. Surface tradeoffs.
+
+2. Simplicity First
+   Minimum code that solves the problem. Nothing speculative.
+
+3. Surgical Changes
+   Touch only what you must. Clean up only your own mess.
+
+4. Goal-Driven Execution
+   Define success criteria. Loop until verified.
+
 ## Project
 
 Morecraft is a Paper (Minecraft 1.21) server plugin written in Java 21 that increases game difficulty and adds new content. Built with Maven.

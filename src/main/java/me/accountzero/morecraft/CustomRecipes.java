@@ -38,7 +38,7 @@ public class CustomRecipes {
         bloodMedalionMeta.displayName(Component.text("Blood Medalion")
                 .color(NamedTextColor.GOLD)
                 .decorate(TextDecoration.BOLD));
-        bloodMedalionMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(new NamespacedKey(plugin, "blood_medalion_attack_boost"), 1, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlotGroup.ANY));
+        bloodMedalionMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(new NamespacedKey(plugin, "blood_medalion_attack_boost"), 1, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlotGroup.ANY));
         bloodMedalionMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, BLOOD_MEDALION_TAG), PersistentDataType.BYTE, (byte) 1);
         bloodMedalion.setItemMeta(bloodMedalionMeta);
 

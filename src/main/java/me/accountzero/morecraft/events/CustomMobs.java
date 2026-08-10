@@ -109,62 +109,62 @@ public class CustomMobs implements Listener {
     private void applyZombieTierStats(Zombie zombie, FileConfiguration config, String tier, double defaultSpeed, double defaultHealth) {
         double speed = config.getDouble("mobs.zombie.tiers." + tier + ".speed", defaultSpeed);
         double health = config.getDouble("mobs.zombie.tiers." + tier + ".health", defaultHealth);
-        setAttr(zombie, Attribute.GENERIC_MOVEMENT_SPEED, speed);
-        setAttr(zombie, Attribute.GENERIC_MAX_HEALTH, health);
+        setAttr(zombie, Attribute.MOVEMENT_SPEED, speed);
+        setAttr(zombie, Attribute.MAX_HEALTH, health);
         zombie.setHealth(health);
     }
 
     private void buffSkeleton(Skeleton skeleton) {
         FileConfiguration config = config();
         skeleton.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET));
-        setAttr(skeleton, Attribute.GENERIC_MOVEMENT_SPEED, config.getDouble("mobs.skeleton.speed", 0.35));
+        setAttr(skeleton, Attribute.MOVEMENT_SPEED, config.getDouble("mobs.skeleton.speed", 0.35));
         double health = config.getDouble("mobs.skeleton.health", 30.0);
-        setAttr(skeleton, Attribute.GENERIC_MAX_HEALTH, health);
+        setAttr(skeleton, Attribute.MAX_HEALTH, health);
         skeleton.setHealth(health);
     }
 
     private void buffSpider(Spider spider) {
         FileConfiguration config = config();
-        setAttr(spider, Attribute.GENERIC_MOVEMENT_SPEED, config.getDouble("mobs.spider.speed", 0.69));
-        setAttr(spider, Attribute.GENERIC_JUMP_STRENGTH, config.getDouble("mobs.spider.jump-strength", 0.8));
-        setAttr(spider, Attribute.GENERIC_ATTACK_DAMAGE, config.getDouble("mobs.spider.attack-damage", 0.5));
+        setAttr(spider, Attribute.MOVEMENT_SPEED, config.getDouble("mobs.spider.speed", 0.69));
+        setAttr(spider, Attribute.JUMP_STRENGTH, config.getDouble("mobs.spider.jump-strength", 0.8));
+        setAttr(spider, Attribute.ATTACK_DAMAGE, config.getDouble("mobs.spider.attack-damage", 0.5));
         double health = config.getDouble("mobs.spider.health", 24.0);
-        setAttr(spider, Attribute.GENERIC_MAX_HEALTH, health);
+        setAttr(spider, Attribute.MAX_HEALTH, health);
         spider.setHealth(health);
     }
 
     private void buffRabbit(Rabbit rabbit) {
         FileConfiguration config = config();
-        setAttr(rabbit, Attribute.GENERIC_JUMP_STRENGTH, config.getDouble("mobs.rabbit.jump-strength", 1.2));
-        setAttr(rabbit, Attribute.GENERIC_SAFE_FALL_DISTANCE, config.getDouble("mobs.rabbit.safe-fall-distance", 8.0));
+        setAttr(rabbit, Attribute.JUMP_STRENGTH, config.getDouble("mobs.rabbit.jump-strength", 1.2));
+        setAttr(rabbit, Attribute.SAFE_FALL_DISTANCE, config.getDouble("mobs.rabbit.safe-fall-distance", 8.0));
         double health = config.getDouble("mobs.rabbit.health", 6.0);
-        setAttr(rabbit, Attribute.GENERIC_MAX_HEALTH, health);
+        setAttr(rabbit, Attribute.MAX_HEALTH, health);
         rabbit.setHealth(health);
     }
 
     private void buffIronGolem(IronGolem ironGolem) {
         FileConfiguration config = config();
-        setAttr(ironGolem, Attribute.GENERIC_MOVEMENT_SPEED, config.getDouble("mobs.iron-golem.speed", 0.50));
+        setAttr(ironGolem, Attribute.MOVEMENT_SPEED, config.getDouble("mobs.iron-golem.speed", 0.50));
         double health = config.getDouble("mobs.iron-golem.health", 150.0);
-        setAttr(ironGolem, Attribute.GENERIC_MAX_HEALTH, health);
+        setAttr(ironGolem, Attribute.MAX_HEALTH, health);
         ironGolem.setHealth(health);
     }
 
     private void buffSnowGolem(Snowman snowGolem) {
         // They will not die when exposed to sun + maybe repurpose as sentry gun ?
         double health = config().getDouble("mobs.snow-golem.health", 40.0);
-        setAttr(snowGolem, Attribute.GENERIC_MAX_HEALTH, health);
+        setAttr(snowGolem, Attribute.MAX_HEALTH, health);
         snowGolem.setHealth(health);
     }
 
     private void buffPhantom(Phantom phantom) {
         double health = config().getDouble("mobs.phantom.health", 40.0);
-        setAttr(phantom, Attribute.GENERIC_MAX_HEALTH, health);
+        setAttr(phantom, Attribute.MAX_HEALTH, health);
         phantom.setHealth(health);
     }
 
     private void buffChicken(Chicken chicken) {
-        setAttr(chicken, Attribute.GENERIC_MOVEMENT_SPEED, config().getDouble("mobs.chicken.speed", 1.0));
+        setAttr(chicken, Attribute.MOVEMENT_SPEED, config().getDouble("mobs.chicken.speed", 1.0));
     }
 
     @EventHandler
