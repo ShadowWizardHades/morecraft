@@ -5,8 +5,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Morecraft extends JavaPlugin {
 
+    private static Morecraft instance;
+
     @Override
     public void onEnable() {
+        instance = this;
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(new CustomMobs(), this);
         CustomRecipes.register(this);
@@ -18,6 +21,6 @@ public class Morecraft extends JavaPlugin {
     }
 
     public static Morecraft getInstance() {
-        return getPlugin(Morecraft.class);
+        return instance;
     }
 }
