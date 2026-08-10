@@ -15,7 +15,7 @@
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.11.3</junit.version>
-        <mockbukkit.version>4.0.0</mockbukkit.version>
+        <mockbukkit.version>4.110.0</mockbukkit.version>
     </properties>
 
     <build>
